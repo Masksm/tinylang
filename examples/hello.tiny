@@ -1,0 +1,14 @@
+# TinyLang hello-world and loop example
+let name = "TinyLang";
+let count = 1;
+
+while (count <= 3) {
+    print(name + " says hello #" + count);
+    count = count + 1;
+}
+
+if (count == 4) {
+    print("Loop completed.");
+} else {
+    print("Something went wrong.");
+}
