@@ -199,9 +199,12 @@ type literalExpr struct{ value any }
 func (e literalExpr) eval(*environment) (any, error) { return e.value, nil }
 type variableExpr struct{ name string; line int }
 func (e variableExpr) eval(env *environment) (any, error) {
-	v, ok := env.values[e.name]
-	if !ok { return nil, fmt.Errorf("line %d: unknown variable %q", e.line, e.name) }
-	return v, nil
+	for scope := env; scope != nil; scope = scope.parent {
+		if v, ok := scope.values[e.name]; ok {
+			return v, nil
+		}
+	}
+	return nil, fmt.Errorf("line %d: unknown variable %q", e.line, e.name)
 }
 type unaryExpr struct{ op tokenKind; right expr; line int }
 func (e unaryExpr) eval(env *environment) (any, error) {
